@@ -72,8 +72,31 @@ namespace Octokit
             Ensure.ArgumentNotNullOrEmptyString(name, nameof(name));
             Ensure.ArgumentNotNull(options, nameof(options));
 
+            return GetAll(owner, name, new DeploymentListFilter(), options);
+        }
+
+        /// <summary>
+        /// Gets all the deployments for the specified repository. Any user with pull access
+        /// to a repository can view deployments.
+        /// </summary>
+        /// <remarks>
+        /// http://developer.github.com/v3/repos/deployments/#list-deployments
+        /// </remarks>
+        /// <param name="owner">The owner of the repository</param>
+        /// <param name="name">The name of the repository</param>
+        /// <param name="filter">Details to filter the request</param>
+        /// <param name="options">Options for changing the API response</param>
+        [Preview("ant-man")]
+        [ManualRoute("GET", "/repos/{owner}/{repo}/deployments")]
+        public Task<IReadOnlyList<Deployment>> GetAll(string owner, string name, DeploymentListFilter filter, ApiOptions options)
+        {
+            Ensure.ArgumentNotNullOrEmptyString(owner, nameof(owner));
+            Ensure.ArgumentNotNullOrEmptyString(name, nameof(name));
+            Ensure.ArgumentNotNull(filter, nameof(filter));
+            Ensure.ArgumentNotNull(options, nameof(options));
+
             return ApiConnection.GetAll<Deployment>(ApiUrls.Deployments(owner, name),
-                                                    null,
+                                                    filter.ToParametersDictionary(),
                                                     AcceptHeaders.DeploymentApiPreview,
                                                     options);
         }
@@ -90,9 +113,26 @@ namespace Octokit
         [ManualRoute("GET", "/repositories/{id}/deployments")]
         public Task<IReadOnlyList<Deployment>> GetAll(long repositoryId, ApiOptions options)
         {
+            return GetAll(repositoryId, new DeploymentListFilter(), options);
+        }
+
+        /// <summary>
+        /// Gets all the deployments for the specified repository. Any user with pull access
+        /// to a repository can view deployments.
+        /// </summary>
+        /// <remarks>
+        /// http://developer.github.com/v3/repos/deployments/#list-deployments
+        /// </remarks>
+        /// <param name="repositoryId">The Id of the repository</param>
+        /// <param name="filter">Details to filter the request</param>
+        /// <param name="options">Options for changing the API response</param>
+        [ManualRoute("GET", "/repositories/{id}/deployments")]
+        public Task<IReadOnlyList<Deployment>> GetAll(long repositoryId, DeploymentListFilter filter, ApiOptions options)
+        {
+            Ensure.ArgumentNotNull(filter, nameof(filter));
             Ensure.ArgumentNotNull(options, nameof(options));
 
-            return ApiConnection.GetAll<Deployment>(ApiUrls.Deployments(repositoryId), options);
+            return ApiConnection.GetAll<Deployment>(ApiUrls.Deployments(repositoryId), filter.ToParametersDictionary(), options);
         }
 
         /// <summary>
