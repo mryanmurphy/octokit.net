@@ -7,7 +7,7 @@ namespace Octokit
     /// Used to create a new release.
     /// </summary>
     /// <remarks>
-    /// API: https://developer.github.com/v3/repos/releases/#create-a-release
+    /// API: https://docs.github.com/en/rest/releases/releases#create-a-release
     /// </remarks>
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public class NewRelease
@@ -32,7 +32,7 @@ namespace Octokit
 
         /// <summary>
         /// Specifies the commitish value that determines where the Git tag is created from. Can be any branch or
-        /// commit SHA. Unused if the Git tag already exists. Default: the repository’s default branch
+        /// commit SHA. Unused if the Git tag already exists. Default: the repositoryâ€™s default branch
         /// (usually main).
         /// </summary>
         /// <value>
@@ -72,6 +72,17 @@ namespace Octokit
         ///   <c>true</c> if prerelease; otherwise, <c>false</c>.
         /// </value>
         public bool Prerelease { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to automatically generate the name and body for this release.
+        /// If <see cref="Name">name</see> is specified, the specified name will be used; otherwise, a name will
+        /// be automatically generated. If <see cref="Body">body</see> is specified, the body will be pre-pended to the
+        /// automatically generated notes.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> to generate release notes; otherwise, <c>false</c>.
+        /// </value>
+        public bool GenerateReleaseNotes { get; set; }
 
         internal string DebuggerDisplay
         {
